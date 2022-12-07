@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="style.css" rel="stylesheet" type="text/css"/>
+	<script src="script9_3_3.js"></script>
+
+    <title>Document</title>
+</head>
+<body>
+	
+	
+	<h1>Задание 9_3_3</h1>
+
+	<input placeholder="Число от 1 до 10" value="2">
+	<button class="btn">Жмак</button>
+	<div class="text"></div>
+	<div class="result"></div>
+<script>
+let button = document.querySelector('.btn');
+let numValue = document.querySelector('input').value;
+//codepen не принимает введенное значение в value, пришлось указать в html value='2', а браузер вообще ошибку выдает :(
+let textBox = document.querySelector('.text');
+let imgBox = document.querySelector('.result');
+
+console.log(numValue);
+button.addEventListener('click', () => {
+  if (numValue <= 1 && numValue >= 10){
+    textBox.textContent=`${numValue} вне диапазона от 1 до 10`;
+    console.log('ok');
+  
+    }else {  
+     useRequest(`https://picsum.photos/v2/list/?limit=${numValue}`, displayResult);
+    }
+})
+
+function displayResult(apiData) {
+  let cards = '';
+  // console.log('start cards', cards);
+  
+  apiData.forEach(item => {
+    const cardBlock = `
+      <div class="card">
+        <img
+          src="${item.download_url}"
+          class="card-image"
+        />
+        <p>${item.author}</p>
+      </div>
+    `;
+    cards = cards + cardBlock;
+  });
+  
+  // console.log('end cards', cards);
+    
+  textBox.innerHTML = cards;
+}
+
+
+function useRequest(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    
+    xhr.onload = function() {
+      if (xhr.status != 200) {
+        console.log('Статус ответа: ', xhr.status);
+      } else {
+        const result = JSON.parse(xhr.response);
+        if (callback) {
+          callback(result);
+        }
+      }
+    };
+    
+    xhr.onerror = function() {
+      console.log('Ошибка! Статус ответа: ', xhr.status);
+    };
+    
+    xhr.send();
+  };
+
+
+
+
+
+
+</script>
+
+	
+</body>
+</html>
+
+
